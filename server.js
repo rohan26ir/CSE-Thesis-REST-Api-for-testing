@@ -1,10 +1,17 @@
-const app = require("./src/app")
-const conectDB = require("./src/db/db")
-// require("dotenv").config();
+require('dotenv').config();
+const app = require('./src/app');
+const connectDB = require('./src/db/db');
 
-conectDB()
+connectDB();
 
-
-app.listen(3000, () => {
-  console.log("Surver is Running Port 3000");
+const PORT = process.env.PORT || 3000;
+const server = app.listen(PORT, () => {
+  console.log(`Server running on port ${PORT}`);
 });
+
+process.on('unhandledRejection', (err, promise) => {
+  console.log(`Error: ${err.message}`);
+  server.close(() => process.exit(1));
+});
+
+module.exports = server;

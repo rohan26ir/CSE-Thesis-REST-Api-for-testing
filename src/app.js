@@ -1,70 +1,47 @@
-const express = require("express");
-const noteModel = require("./models/note.model")
+const express = require('express');
+const cors = require('cors');
+const errorHandler = require('./middleware/errorHandler');
 
+// Route imports
+const userRoutes = require('./routes/userRoutes');
+const productRoutes = require('./routes/productRoutes');
 
+// Create Express app
 const app = express();
-app.use(express.json);  // middleware
 
+// Middleware
+app.use(cors());
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 
-// POST 
-// GET
-// DLETE
-// PATCH
+// Logging middleware
+app.use((req, res, next) => {
+    console.log(`${req.method} ${req.url}`);
+    next();
+});
 
-// POST Oparation
-app.post("/notes", async (req, res) => {
+// Health check route
+app.get('/', (req, res) => {
+    res.json({
+        success: true,
+        message: 'API is running...',
+        version: '1.0.0'
+    });
+});
 
-  const data = req.body /*  title, description */
-  await noteModel.create({ 
-    title:data.title,
-    descriiption: data.descriiption
+// Mount routes
+app.use('/api/users', userRoutes);
+app.use('/api/products', productRoutes);
 
-   })
-   res.status(201).json({
-     message: "Note Created"
-   })
-})
+// Error handling middleware
+app.use(errorHandler);
 
-// GET oparation
-app.get("/notes", async (req, res) => {
-
-  await noteModel.find(); 
-
-  res.status(200).json({
-    message: "Note fetch successfully",
-    notes: notes
-  })
-})
-
-// DELETE 
-app.delete("/notes/:id", async(req, res) => {
-
-  const id = req.params.id
-
-  await noteModel.findByIdAndDelete({
-    _id: id
-  })
-  res.status(200).json({
-    message: "Delete Successfully",
-  })
-})
-
-// Patch
-app.patch("/notes/:id", async(req, res)=> {
-
-  const id = req.params.id
-
-  await noteModel.findOneAndUpdate({
-    _id : id 
-  },
-  {
-    description: description
-  })
-
-  res.status(200).json({
-    message: "Note update successfully"
-  })
-})
-
+// 404 handler
+app.use((req, res) => {
+    res.status(404).json({
+        success: false,
+        message: 'Route not found'
+    });
+});
 
 module.exports = app;

@@ -1,14 +1,18 @@
-const mongoose = require("mongoose")
+// src/config/db.js
+const mongoose = require('mongoose');
 
-async function  conectDB() {
-  
-  // await mongoose.connect(process.env.mongoDB);
+const connectDB = async () => {
+    try {
+        if (!process.env.MONGODB_URI) {
+            throw new Error('MONGODB_URI is not defined in environment variables');
+        }
 
-  await mongoose.connect("mongodb+srv://backend-learn:BAPrZrtcXXltTcNf@cluster0.t3vfrkp.mongodb.net/?appName=backend-learning");
+        const conn = await mongoose.connect(process.env.MONGODB_URI);
+        console.log(`MongoDB Connected: ${conn.connection.host}`);
+    } catch (error) {
+        console.error(`Error: ${error.message}`);
+        process.exit(1);
+    }
+};
 
-  console.log("Connected Mongodb");
-
-}
-
-
-module.exports = conectDB;
+module.exports = connectDB;
