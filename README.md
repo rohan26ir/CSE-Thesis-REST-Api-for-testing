@@ -45,11 +45,11 @@ npm run dev
 # or
 npx nodemon server.js
 ```
-Server will run at `http://localhost:3000`
+Server will run at `http://localhost:5000`
 ## API Endpoints
 ### Base URL
 ```
-http://localhost:3000/api
+http://localhost:5000/api
 ```
 ### Health Check
 - `GET /` - Check if API is running
@@ -75,7 +75,7 @@ http://localhost:3000/api
 ---
 ## Postman Collection Examples
 ### 1. Register User
-**POST** `http://localhost:3000/api/users/register`
+**POST** `http://localhost:5000/api/users/register`
 **Body (JSON)**:
 ```json
 {
@@ -98,7 +98,7 @@ http://localhost:3000/api
 }
 ```
 ### 2. Login User
-**POST** `http://localhost:3000/api/users/login`
+**POST** `http://localhost:5000/api/users/login`
 **Body (JSON)**:
 ```json
 {
@@ -107,34 +107,117 @@ http://localhost:3000/api
 }
 ```
 ### 3. Get Current User (Protected)
-**GET** `http://localhost:3000/api/users/me`
+**GET** `http://localhost:5000/api/users/me`
 **Headers**:
 ```
 Authorization: Bearer <your-jwt-token>
 ```
 ### 4. Create Product (Protected)
-**POST** `http://localhost:3000/api/products`
+**POST** `http://localhost:5000/api/products`
 **Headers**:
-```
-Authorization: Bearer <your-jwt-token>
-```
-**Body (JSON)**:
+
+## 🧪 Postman Testing Examples
+
+### Complete Product Data for Testing
+
+Below are 25+ sample products with all available fields for comprehensive API testing in Postman.
+
+---
+
+### Sample Product 1: Electronics - Laptop
+
 ```json
 {
- "name": "Wireless Headphones",
- "description": "Premium noise-cancelling wireless headphones",
- "price": 129.99,
- "category": "Electronics",
- "stock": 50,
- "brand": "Sony",
- "tags": ["audio", "wireless", "headphones"]
+  "name": "MacBook Pro 16-inch M3 Max",
+  "shortDescription": "Ultimate professional laptop with M3 Max chip",
+  "description": "Apple's most powerful laptop with M3 Max chip, 36GB unified memory, 1TB SSD storage, 16-core GPU, and 22-hour battery life. Perfect for professionals and content creators.",
+  "price": 3499.99,
+  "compareAtPrice": 3999.99,
+  "costPerItem": 2400.00,
+  "discount": 15,
+  "taxRate": 8.5,
+  "category": "Electronics",
+  "subCategory": "Laptops",
+  "tags": ["Apple", "M3", "Laptop", "Professional", "Content Creation"],
+  "brand": "Apple",
+  "sku": "MBP-M3-16-36-1TB",
+  "barcode": "885909949345",
+  "stock": 15,
+  "lowStockThreshold": 5,
+  "isBackorderAllowed": true,
+  "weight": 2.1,
+  "dimensions": {
+    "length": 35.57,
+    "width": 24.81,
+    "height": 1.68,
+    "unit": "cm"
+  },
+  "imageUrl": "https://example.com/images/macbook-pro-m3.jpg",
+  "images": [
+    "https://example.com/images/macbook-pro-m3-1.jpg",
+    "https://example.com/images/macbook-pro-m3-2.jpg",
+    "https://example.com/images/macbook-pro-m3-3.jpg"
+  ],
+  "videoUrl": "https://www.youtube.com/watch?v=example",
+  "rating": 4.9,
+  "totalReviews": 234,
+  "averageRating": 4.9,
+  "reviewCount": 234,
+  "isFeatured": true,
+  "isNewArrival": true,
+  "isBestSeller": false,
+  "isOnSale": true,
+  "isActive": true,
+  "isDigital": false,
+  "isPhysical": true,
+  "isTaxable": true,
+  "isFreeShipping": false,
+  "hasVariants": false,
+  "shipping": {
+    "weight": 2.1,
+    "dimensions": {
+      "length": 35.57,
+      "width": 24.81,
+      "height": 1.68
+    },
+    "freeShipping": false,
+    "shippingCost": 15.00,
+    "estimatedDelivery": "2-3 business days"
+  },
+  "warranty": "Limited Warranty",
+  "warrantyPeriod": 24,
+  "returnPolicy": "30 days return policy",
+  "returnWindow": 30,
+  "vendor": "Apple Inc.",
+  "seoTitle": "MacBook Pro 16-inch M3 Max - Apple's Most Powerful Laptop",
+  "seoDescription": "Buy MacBook Pro with M3 Max chip, 36GB memory, 1TB SSD. Best laptop for professionals and content creators.",
+  "seoKeywords": ["MacBook Pro", "M3 Max", "Apple Laptop", "Professional Laptop"],
+  "slug": "macbook-pro-16-inch-m3-max",
+  "metaTitle": "MacBook Pro 16-inch M3 Max | Apple Professional Laptop",
+  "metaDescription": "The ultimate MacBook Pro with M3 Max chip for professionals. 36GB memory, 1TB storage, 22-hour battery life.",
+  "color": ["Silver", "Space Gray"],
+  "size": ["16-inch"],
+  "material": "Aluminum",
+  "features": ["M3 Max Chip", "36GB Memory", "1TB SSD", "16-core GPU", "22-hour Battery", "Retina Display"],
+  "specifications": {
+    "processor": "Apple M3 Max",
+    "memory": "36GB Unified",
+    "storage": "1TB SSD",
+    "display": "16-inch Liquid Retina XDR",
+    "battery": "22 hours",
+    "weight": "2.1 kg"
+  },
+  "relatedProducts": [],
+  "views": 1500,
+  "purchases": 89
 }
-```
+
+
 ### 5. Get Products (with Query Params)
-**GET** `http://localhost:3000/api/products?category=Electronics&minPrice=50&max
+**GET** `http://localhost:5000/api/products?category=Electronics&minPrice=50&max
 Price=200&search=headphones&page=1&limit=10`
 ### 6. Update Product Stock
-**PATCH** `http://localhost:3000/api/products/:id/stock`
+**PATCH** `http://localhost:5000/api/products/:id/stock`
 **Body (JSON)**:
 ```json
 {
