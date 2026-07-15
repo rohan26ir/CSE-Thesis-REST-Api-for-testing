@@ -33,11 +33,13 @@ npm install
 ### 3. Environment Setup
 Create a `.env` file in the root directory:
 ```env
-PORT=3000
-MONGO_URI=mongodb://localhost:27017/cse-thesis-db
+PORT=5000
+MONGODB_URI=mongodb://localhost:27017/cse-thesis-db
 JWT_SECRET=your-super-secret-jwt-key-here
-JWT_EXPIRE=30d
+JWT_EXPIRE=7d
 ```
+> The app accepts either `MONGODB_URI` or `MONGO_URI`. The code and examples below use `MONGODB_URI`.
+
 ### 4. Run the server
 ```bash
 # Development mode (with nodemon)
@@ -46,6 +48,7 @@ npm run dev
 npx nodemon server.js
 ```
 Server will run at `http://localhost:5000`
+
 ## API Endpoints
 ### Base URL
 ```
@@ -53,25 +56,27 @@ http://localhost:5000/api
 ```
 ### Health Check
 - `GET /` - Check if API is running
+
 ### Users API (`/api/users`)
 | Method | Endpoint | Description | Access |
 |--------|----------|-------------|--------|
-| POST | `/register` | Register a new user | Public |
-| POST | `/login` | Login user | Public |
-| GET | `/me` | Get current user profile | Private |
-| PUT | `/updatedetails` | Update user details | Private |
-| PUT | `/updatepassword` | Update password | Private |
-| GET | `/` | Get all users | Private/Admin |
-| DELETE | `/:id` | Delete user | Private/Admin |
+| POST | `/api/users/register` | Register a new user | Public |
+| POST | `/api/users/login` | Login user | Public |
+| GET | `/api/users/me` | Get current user profile | Private |
+| PUT | `/api/users/updatedetails` | Update user details | Private |
+| PUT | `/api/users/updatepassword` | Update password | Private |
+| GET | `/api/users` | Get all users | Private/Admin |
+| DELETE | `/api/users/:id` | Delete user | Private/Admin |
+
 ### Products API (`/api/products`)
 | Method | Endpoint | Description | Access |
 |--------|----------|-------------|--------|
-| GET | `/` | Get all products (with filters) | Public |
-| GET | `/:id` | Get single product | Public |
-| POST | `/` | Create new product | Private |
-| PUT | `/:id` | Update product | Private (Owner/Admin) |
-| DELETE | `/:id` | Delete product | Private (Owner/Admin) |
-| PATCH | `/:id/stock` | Update product stock | Private |
+| GET | `/api/products` | Get all products (with filters, pagination, search) | Public |
+| GET | `/api/products/:id` | Get single product | Public |
+| POST | `/api/products` | Create new product | Private |
+| PUT | `/api/products/:id` | Update product | Private (Owner/Admin) |
+| DELETE | `/api/products/:id` | Delete product | Private (Owner/Admin) |
+| PATCH | `/api/products/:id/stock` | Update product stock | Private |
 ---
 ## Postman Collection Examples
 ### 1. Register User
@@ -211,20 +216,9 @@ Below are 25+ sample products with all available fields for comprehensive API te
   "views": 1500,
   "purchases": 89
 }
-
-
-### 5. Get Products (with Query Params)
-**GET** `http://localhost:5000/api/products?category=Electronics&minPrice=50&max
-Price=200&search=headphones&page=1&limit=10`
-### 6. Update Product Stock
-**PATCH** `http://localhost:5000/api/products/:id/stock`
-**Body (JSON)**:
-```json
-{
- "stock": 45
-}
-```
 ---
+
+
 ## Authentication
 All protected routes require a JWT token in the Authorization header:
 ```
