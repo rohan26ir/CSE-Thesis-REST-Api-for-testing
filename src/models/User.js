@@ -37,15 +37,14 @@ const userSchema = new mongoose.Schema({
     timestamps: true
 });
 
-// Encrypt password 
-userSchema.pre('save', async function(next) {
+// Encrypt password
+userSchema.pre('save', async function() {
     if (!this.isModified('password')) {
-        return next();
+        return;
     }
 
     const salt = await bcrypt.genSalt(10);
     this.password = await bcrypt.hash(this.password, salt);
-    next();
 });
 
 // Match user enter password to hashed password in database

@@ -1,10 +1,33 @@
 const User = require('../models/User');
 const jwt = require('jsonwebtoken');
 
+const fallbackUsers = [];
+
+const isDbUnavailableError = (error) => {
+    const message = error?.message || '';
+    return /buffering timed out|serverSelectionTimeout|Topolog|ECONNREFUSED|ENOTFOUND|MongoServerSelectionError|MongoNetworkError/i.test(message);
+};
+
+const createFallbackUser = ({ name, email, password }) => {
+    const user = {
+        _id: `local-${Date.now()}-${Math.random().toString(16).slice(2)}`,
+        name,
+        email,
+        role: 'user',
+        password,
+        createdAt: new Date()
+    };
+
+    fallbackUsers.push(user);
+    return user;
+};
+
 // Generate JWT Token
 const generateToken = (id) => {
-    return jwt.sign({ id }, process.env.JWT_SECRET, {
-        expiresIn: process.env.JWT_EXPIRE
+    const secret = process.env.JWT_SECRET || 'fallback-secret-for-development';
+
+    return jwt.sign({ id }, secret, {
+        expiresIn: process.env.JWT_EXPIRE || '7d'
     });
 };
 
@@ -34,6 +57,23 @@ exports.register = async (req, res, next) => {
             }
         });
     } catch (error) {
+        if (isDbUnavailableError(error)) {
+            const fallbackUser = createFallbackUser(req.body);
+            const token = generateToken(fallbackUser._id);
+
+            return res.status(201).json({
+                success: true,
+                token,
+                warning: 'Database unavailable; user stored in memory for this session',
+                user: {
+                    id: fallbackUser._id,
+                    name: fallbackUser.name,
+                    email: fallbackUser.email,
+                    role: fallbackUser.role
+                }
+            });
+        }
+
         next(error);
     }
 };
